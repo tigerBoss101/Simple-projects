@@ -1,22 +1,29 @@
-#file sorter V 1.0.0
+"""
+File sorter V 1.0.1
+"""
 
-from collections import defaultdict
 import os
 import shutil
-filter_option = False
-filter_types = ["jpg", "png", "mp4"]
-test_path = "D:" # selected folder path
-files = [f for f in os.listdir(test_path) if "." in f and f.split(".")[1] in filter_types]
-file_map = defaultdict(list)
-for f in files:
-    file_map[f.split(".")[1]].append(f)
-file_map = dict(file_map)
-for ext in file_map:
-    if not os.path.exists(test_path + "/" + ext):
-        os.makedirs(test_path + "/" + ext)
-for ext in file_map:
-    current_files = file_map[ext]
-    for f in current_files:
-        start = test_path + "/" + f
-        end = test_path + "/" + ext + "/" + f
-        shutil.move(start, end)
+from itertools import groupby
+
+
+def main(target_path: str) -> None:
+    filter_types = ["jpg", "png", "mp4"]
+    files = [f for f in os.listdir(target_path) if "." in f and f.split(".")[1] in filter_types]
+    file_map = {key:list(group) for key, group in groupby(files, key=lambda file: file.split(".")[1])}
+
+    for ext in file_map:
+        ext_dir = f"{target_path}/{ext}"
+        if not os.path.exists(ext_dir):
+            os.makedirs(ext_dir)
+
+        current_files = file_map[ext]
+        for file in current_files:
+            start = f"{target_path}/{file}"
+            end = f"{target_path}/{ext}/{file}"
+            shutil.move(start, end)
+
+
+if __name__ == "__main__":
+    path = "D:" # selected folder path
+    main(path)
