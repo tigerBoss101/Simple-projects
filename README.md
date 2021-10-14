@@ -6,6 +6,6 @@ Random simple projects that I make!
 
 ## Installation
 
-Clone the repository and run the files with [python]. [python]
+Clone the repository and run the files with [python].
 
 [python]: https://www.python.org/downloads/
